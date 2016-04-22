@@ -1,4 +1,8 @@
-<?
+<?php
+
+$user = $_GET["user"];
+$pass = $_GET["pass"];
+
 
 class databases{
 
@@ -6,7 +10,7 @@ class databases{
 		$mysql;
 
 	function connect(){
-		$this->mysql = new mysqli("localhost", "root", "", "wow");
+		$this->mysql = new mysqli("localhost", "berndvsql5", "DispatchR", "berndvsql5");
 	}
 
 	//Arguments: $query -> SQL-Query
@@ -56,3 +60,17 @@ class databases{
 }
 
 $mysql = new databases();
+
+function checkPass($user, $pass, $mysql) {
+	$sql = sprintf("SELECT user.username, user.password FROM user WHERE user.username = '%s' LIMIT 1");
+	echo "entered";
+	$res = $mysql->selectQuery($sql);
+	echo "done";
+	$row = $res->fetch_assoc;
+	echo "done1";
+	echo $row["username"];
+}
+
+checkPass($user, $pass, $mysql);
+
+?>
