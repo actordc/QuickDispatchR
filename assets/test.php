@@ -1,27 +1,58 @@
-<?php
-	/*
-	This file belongs in the webserver-directory on the server, where the mysql database is running on.
-	*/
-	$mysqli = mysqli_connect("localhost", "berndvsql5", "DispatchR", "berndvsql5");
-	if (mysqli_connect_errno()) {
-		echo "Failed to connect to MySQL: " . mysqli_connect_error();
+<?
+
+class databases{
+
+	var $lastError = "",
+		$mysql;
+
+	function connect(){
+		$this->mysql = new mysqli("localhost", "root", "", "wow");
 	}
 
-	$username = $_GET["user"];
-	$password = $_GET["pass"];
+	//Arguments: $query -> SQL-Query
+	//			 $paramTypes -> array("s","s","i") datatypes from parameters (string, string, integer)
+	//           $params -> array($username, $password) parameters
+	function selectQuery($query, $paramTypes, $params){
+			
+		if (is_null($this->mysqlWeb))
+			$this->connect();
 
-	function checkPassword($username, $password){
-		$sql = sprintf("SELECT user.username, user.password FROM user WHERE username = %s LIMIT 1", $username);
-		echo "1";
-		$result = $mysqli->query($sql);
-		echo mysqli_error($mysqli);
-		$row = $result->fetch_assoc();
-		echo "3";
-		echo $row["username"];
-		echo "4";
+		$stmt = $this->prepare($query, $paramTypes, $params);
+		$stmt->execute();
+		$res = $stmt->get_result();
+
+        return $res;
 	}
 
-	echo "testi\n";
-	checkPassword();
+	function insertQuery($query, $paramTypes, $params){
+		if(is_null($this->mysql))
+			$this->connect();
 
-?>
+		$stmt = $this->prepare($query, $paramTypes, $params);
+		$stmt->execute();
+	}
+
+	function prepare($query, $paramTypes, $params){
+
+		$stmt = $this->mysql->prepare($query);
+
+		$a_params = array();
+
+		$param_type = "";
+		$n = count($paramTypes);
+		for($i = 0; $i < $n; $i++){
+			$param_type .= $paramTypes[$i];
+		}		
+
+		$a_params[] = & $param_type;
+
+		for($i = 0; $i < $n; $i++){
+			$a_params[] = & $params[$i];
+		}
+
+		call_user_func_array(array($stmt, "bind_param"), $a_params);
+		return $stmt;
+	}
+}
+
+$mysql = new databases();
