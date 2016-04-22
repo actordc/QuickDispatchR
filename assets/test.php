@@ -1,8 +1,8 @@
 <?php
 
-$user = $_GET["user"];
-$pass = $_GET["pass"];
-
+$user = "naw1";
+$pass = "asdf";
+$mpass = 'Con$icker11';
 
 class databases{
 
@@ -10,7 +10,7 @@ class databases{
 		$mysql;
 
 	function connect(){
-		$this->mysql = new mysqli("localhost", "berndvsql5", "DispatchR", "berndvsql5");
+		$this->mysql = new mysqli("localhost", "i14097", 'Con$icker11', "i14097");
 	}
 
 	//Arguments: $query -> SQL-Query
@@ -18,7 +18,7 @@ class databases{
 	//           $params -> array($username, $password) parameters
 	function selectQuery($query, $paramTypes, $params){
 			
-		if (is_null($this->mysqlWeb))
+		if (is_null($this->mysql))
 			$this->connect();
 
 		$stmt = $this->prepare($query, $paramTypes, $params);
@@ -62,9 +62,9 @@ class databases{
 $mysql = new databases();
 
 function checkPass($user, $pass, $mysql) {
-	$sql = sprintf("SELECT user.username, user.password FROM user WHERE user.username = '%s' LIMIT 1");
+	$sql = sprintf("SELECT user.username, user.password FROM user WHERE user.username = ? LIMIT 1");
 	echo "entered";
-	$res = $mysql->selectQuery($sql);
+	$res = $mysql->selectQuery($sql, "s", $user);
 	echo "done";
 	$row = $res->fetch_assoc;
 	echo "done1";
@@ -74,3 +74,4 @@ function checkPass($user, $pass, $mysql) {
 checkPass($user, $pass, $mysql);
 
 ?>
+
