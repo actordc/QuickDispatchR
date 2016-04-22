@@ -2,7 +2,7 @@
 
 $user = "naw1";
 $pass = "asdf";
-$mpass = 'Con$icker11';
+$mpass = '***';
 
 class databases{
 
@@ -10,7 +10,7 @@ class databases{
 		$mysql;
 
 	function connect(){
-		$this->mysql = new mysqli("localhost", "i14097", 'Con$icker11', "i14097");
+		$this->mysql = new mysqli("localhost", "***", 'Con$icker11', "***");
 	}
 
 	//Arguments: $query -> SQL-Query
