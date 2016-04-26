@@ -1,8 +1,9 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
-$user = "naw1";
-$pass = "asdf";
-$mpass = '***';
+$user = $_GET["u"];
+$pass = $_GET["p"];
 
 class databases{
 
@@ -10,7 +11,7 @@ class databases{
 		$mysql;
 
 	function connect(){
-		$this->mysql = new mysqli("localhost", "***", 'Con$icker11', "***");
+		$this->mysql = new mysqli("***", "***", '***', "***");
 	}
 
 	//Arguments: $query -> SQL-Query
@@ -61,14 +62,15 @@ class databases{
 
 $mysql = new databases();
 
-function checkPass($user, $pass, $mysql) {
+function checkPass($user, $password_entered, $mysql) {
 	$sql = sprintf("SELECT user.username, user.password FROM user WHERE user.username = ? LIMIT 1");
 	echo "entered";
-	$res = $mysql->selectQuery($sql, "s", $user);
-	echo "done";
-	$row = $res->fetch_assoc;
-	echo "done1";
-	echo $row["username"];
+	$res = $mysql->selectQuery($sql, array("s"), array($user));
+	$row = $res->fetch_assoc();
+	$password_hash = $row["password"];
+	if (crypt($password_entered, $password_hash) == $password_hash) {
+	   echo "OK";
+	}
 }
 
 checkPass($user, $pass, $mysql);
