@@ -19,7 +19,7 @@ class databases{
 		$mysql;
 
 	function connect(){
-		$this->mysql = new mysqli("localhost", "danube", '!D3v!', "danube");
+		$this->mysql = new mysqli("***", "***", '***', "***");
 	}
 
 	//Arguments: $query -> SQL-Query

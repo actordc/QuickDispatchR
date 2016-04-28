@@ -1,5 +1,5 @@
 package eu.uplinkgroup.qDispatcher.console;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
 
@@ -7,7 +7,7 @@ public class Helper {
 		
 	
 	public static void main(String[] args) throws Exception {
-		//Insert test here.
+		//Nothing in here...
 	}
 }
 
@@ -33,7 +33,7 @@ class URLHelper {
 		URLConnection con = db.openConnection();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
-		String output;
+		String output = "";
 		while ((inputLine = in.readLine()) != null) {
 			output += inputLine;
 		}
@@ -41,16 +41,56 @@ class URLHelper {
 		return output;
 	}
 	
-	public int chk(){
+	public int chk() throws Exception{
 		String finalUrl = buildAddress();
 		String output = openAndCheck(finalUrl);
-		if (output == "OK"){
+		if (output.matches("OK")){
 			return 0;
-		} else if (output == "NO"){
+		} else if (output.matches("NO")){
 			return -1;
 		} else {
 			return -2;
 		}
 		
+	}
+}
+
+class PasswordHelper {
+	private char[] pass;
+	private String converted = "";
+	
+	PasswordHelper(char[] password){
+		pass = password;
+		
+	}
+	
+	public String parse(){
+		for (char e : pass){
+			converted += e;
+		}
+		
+		return converted;
+	}
+	
+}
+
+class CBoxHelper {
+	private String content;
+	private String host;
+	
+	CBoxHelper(String c){
+		content = c;
+	}
+	
+	public String parse(){
+		if (content.equals("UplinkGroup.eu")) {
+			host = "http://danube.uplinkgroup.eu/index.php";
+		} else if (content.equals("CaptainCode.net")) {
+			host = "http://danube.captaincode.eu/index.php";
+		} else {
+			host = "ERROR";
+		}
+		
+		return host;
 	}
 }
